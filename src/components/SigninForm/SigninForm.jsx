@@ -4,7 +4,7 @@ import * as authService from '../../services/authService';
 
 const SigninForm = (props) => {
   const navigate = useNavigate();
-  const [message, setMessage] = useState(['']);
+  const [message, setMessage] = useState(''); // Initialize message as a string
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -15,7 +15,7 @@ const SigninForm = (props) => {
   };
 
   const handleChange = (e) => {
-    updateMessage('');
+    updateMessage(''); // Clear message on change
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -23,11 +23,10 @@ const SigninForm = (props) => {
     e.preventDefault();
     try {
       const user = await authService.signin(formData);
-      console.log(user);
-      props.setUser(user);
-      navigate('/');
+      props.setUser(user); // Update user in parent component
+      navigate('/'); // Redirect to home
     } catch (err) {
-      updateMessage(err.message);
+      updateMessage(err.message); // Show error message
     }
   };
 
@@ -37,7 +36,7 @@ const SigninForm = (props) => {
       <p>{message}</p>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Username:</label>
+          <label htmlFor="username">Username:</label> {/* Updated label for accessibility */}
           <input
             type="text"
             autoComplete="off"
@@ -59,9 +58,9 @@ const SigninForm = (props) => {
           />
         </div>
         <div>
-          <button>Log In</button>
+          <button type="submit">Log In</button> {/* Ensure Log In button is of type submit */}
           <Link to="/">
-            <button>Cancel</button>
+            <button type="button">Cancel</button> {/* Set Cancel button type to button */}
           </Link>
         </div>
       </form>

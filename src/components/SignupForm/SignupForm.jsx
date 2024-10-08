@@ -4,7 +4,7 @@ import * as authService from '../../services/authService';
 
 const SignupForm = (props) => {
   const navigate = useNavigate();
-  const [message, setMessage] = useState(['']);
+  const [message, setMessage] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -23,10 +23,10 @@ const SignupForm = (props) => {
     e.preventDefault();
     try {
       const newUserResponse = await authService.signup(formData);
-      props.setUser(newUserResponse.user);
+      props.setUser(newUserResponse.user); // Assuming `setUser` updates the authenticated user
       navigate('/');
     } catch (err) {
-      updateMessage(err.message);
+      updateMessage(err.message); // Display error message if signup fails
     }
   };
 
@@ -45,7 +45,7 @@ const SignupForm = (props) => {
           <label htmlFor="username">Username:</label>
           <input
             type="text"
-            id="name"
+            id="username"
             value={username}
             name="username"
             onChange={handleChange}
@@ -62,10 +62,10 @@ const SignupForm = (props) => {
           />
         </div>
         <div>
-          <label htmlFor="confirm">Confirm Password:</label>
+          <label htmlFor="passwordConf">Confirm Password:</label>
           <input
             type="password"
-            id="confirm"
+            id="passwordConf"
             value={passwordConf}
             name="passwordConf"
             onChange={handleChange}
@@ -74,7 +74,7 @@ const SignupForm = (props) => {
         <div>
           <button disabled={isFormInvalid()}>Sign Up</button>
           <Link to="/">
-            <button>Cancel</button>
+            <button type="button">Cancel</button>
           </Link>
         </div>
       </form>
