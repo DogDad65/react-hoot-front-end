@@ -1,0 +1,48 @@
+/* src/components/SignupForm/SignupForm.module.css */
+.container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .container img {
+    width: 65%;
+    max-width: 500px;
+  }
+  
+  .container section {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    padding: 28px 21px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .container div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container button {
+    color: white;
+    font-weight: 600;
+    background: #00a0df;
+    margin: 21px 0px 0px 0px;
+  }
+  
+  @media only screen and (max-width: 912px) {
+    .container section {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .container section:first-child {
+      display: none;
+    }
+    .container form {
+      min-width: 100%;
+    }
+  }
+  

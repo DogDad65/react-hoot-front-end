@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as authService from '../../services/authService';
+import SignupIcon from '../../assets/images/signup.svg';
+import styles from './SignupForm.module.css';
 
 const SignupForm = (props) => {
   const navigate = useNavigate();
@@ -23,10 +25,10 @@ const SignupForm = (props) => {
     e.preventDefault();
     try {
       const newUserResponse = await authService.signup(formData);
-      props.setUser(newUserResponse.user); // Assuming `setUser` updates the authenticated user
+      props.setUser(newUserResponse.user);
       navigate('/');
     } catch (err) {
-      updateMessage(err.message); // Display error message if signup fails
+      updateMessage(err.message);
     }
   };
 
@@ -37,47 +39,52 @@ const SignupForm = (props) => {
   };
 
   return (
-    <main>
-      <h1>Sign Up</h1>
-      <p>{message}</p>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            name="username"
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            name="password"
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="passwordConf">Confirm Password:</label>
-          <input
-            type="password"
-            id="passwordConf"
-            value={passwordConf}
-            name="passwordConf"
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <button disabled={isFormInvalid()}>Sign Up</button>
-          <Link to="/">
-            <button type="button">Cancel</button>
-          </Link>
-        </div>
-      </form>
+    <main className={styles.container}>
+      <section>
+        <img src={SignupIcon} alt="An owl sitting on a sign" />
+      </section>
+      <section>
+        <h1>Sign Up</h1>
+        <p>{message}</p>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              name="username"
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              name="password"
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="passwordConf">Confirm Password:</label>
+            <input
+              type="password"
+              id="passwordConf"
+              value={passwordConf}
+              name="passwordConf"
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <button disabled={isFormInvalid()}>Sign Up</button>
+            <Link to="/">
+              <button type="button">Cancel</button>
+            </Link>
+          </div>
+        </form>
+      </section>
     </main>
   );
 };

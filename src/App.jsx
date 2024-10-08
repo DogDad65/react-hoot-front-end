@@ -6,10 +6,12 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import SignupForm from "./components/SignupForm/SignupForm";
 import SigninForm from "./components/SigninForm/SigninForm";
 import HootList from "./components/HootList/HootList";
-import HootDetail from "./components/HootDetail/HootDetail";
+import HootDetail from "./components/HootDetails/HootDetails";
 import HootForm from "./components/HootForm/HootForm";
 import * as authService from "./services/authService";
 import * as hootService from "./services/hootService";
+import CommentForm from "./components/CommentForm/CommentForm";
+
 
 export const AuthedUserContext = createContext(null);
 
@@ -62,26 +64,19 @@ const App = () => {
       <Routes>
         {user ? (
           <>
+            <Route path="/" element={<Landing />} />
             <Route path="/" element={<Dashboard user={user} />} />
             <Route path="/hoots" element={<HootList hoots={hoots} />} />
-            <Route
-              path="/hoots/:hootId"
-              element={<HootDetail handleDeleteHoot={handleDeleteHoot} />}
-            />
-            <Route
-              path="/hoots/new"
-              element={<HootForm handleAddHoot={handleAddHoot} />}
-            />
+            <Route path="/hoots/:hootId" element={<HootDetail handleDeleteHoot={handleDeleteHoot} />} />
+            <Route path="/hoots/new" element={<HootForm handleAddHoot={handleAddHoot} />} />
           </>
         ) : (
-          <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Landing />} />
         )}
         <Route path="/signup" element={<SignupForm setUser={setUser} />} />
         <Route path="/signin" element={<SigninForm setUser={setUser} />} />
-        <Route
-          path="/hoots/:hootId/edit"
-          element={<HootForm handleUpdateHoot={handleUpdateHoot} />}
-        />
+        <Route path="/hoots/:hootId/edit" element={<HootForm handleUpdateHoot={handleUpdateHoot} />} />
+        <Route path="/hoots/:hootId/comments/:commentId/edit" element={<CommentForm isEdit={true} />} />
       </Routes>
     </AuthedUserContext.Provider>
   );

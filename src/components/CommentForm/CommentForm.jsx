@@ -1,23 +1,40 @@
 // src/components/CommentForm/CommentForm.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import * as commentService from "../../services/commentService";
+import Icon from "../Icon/Icon";
 
-const CommentForm = ({ handleAddComment }) => {
-  const [formData, setFormData] = useState({ text: '' });
+const CommentForm = ({ handleAddComment, handleUpdateComment, isEdit }) => {
+  const { hootId, commentId } = useParams();
+  const [formData, setFormData] = useState({ text: "" });
 
-  const handleChange = (evt) => {
-    setFormData({ ...formData, [evt.target.name]: evt.target.value });
-  };
+  useEffect(() => {
+    if (isEdit && commentId) {
+      const fetchComment = async () => {
+        const comment = await commentService.getComment(hootId, commentId);
+        setFormData({ text: comment.text });
+      };
+      fetchComment();
+    }
+  }, [isEdit, hootId, commentId]);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    handleAddComment(formData); // Pass the form data up to HootDetail
-    setFormData({ text: '' }); // Clear the form after submission
+  const handleChange = (e) =>
+    setFormData({ ...formData, text: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isEdit) {
+      await handleUpdateComment(hootId, commentId, formData);
+    } else {
+      handleAddComment(formData);
+    }
+    setFormData({ text: "" });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="text-input">Your comment:</label>
+      <label htmlFor="text-input">{isEdit ? "Edit" : "New"} Comment:</label>
       <textarea
         required
         name="text"
@@ -25,7 +42,9 @@ const CommentForm = ({ handleAddComment }) => {
         value={formData.text}
         onChange={handleChange}
       />
-      <button type="submit">Submit Comment</button>
+      <button type="submit">
+        <Icon category="Create" />
+      </button>
     </form>
   );
 };
