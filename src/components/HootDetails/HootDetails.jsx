@@ -69,6 +69,16 @@ const HootDetail = (props) => {
     <article className={styles.container}>
       <h2>{hoot.title}</h2>
       <p>{hoot.text}</p>
+      
+      {/* Check if photoUrl exists and render the image */}
+      {hoot.photoUrl && (
+        <img 
+          src={hoot.photoUrl} 
+          alt={hoot.title} 
+          className={styles.hootImage} // You can add CSS for image styling
+        />
+      )}
+      
       <p>
         Posted by {hoot.author.username} on{" "}
         {new Date(hoot.createdAt).toLocaleDateString()}

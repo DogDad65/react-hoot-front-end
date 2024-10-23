@@ -1,5 +1,3 @@
-// src/services/hootService.js
-
 const BASE_URL = `${import.meta.env.VITE_EXPRESS_BACKEND_URL}/hoots`;
 
 const index = async () => {
@@ -7,9 +5,11 @@ const index = async () => {
     const res = await fetch(BASE_URL, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error fetching hoots: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
     console.log(error);
+    return null; // Return null or handle the error in the UI
   }
 };
 
@@ -18,9 +18,11 @@ const show = async (hootId) => {
     const res = await fetch(`${BASE_URL}/${hootId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error fetching hoot: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
     console.log(error);
+    return null; // Handle error
   }
 };
 
@@ -30,13 +32,15 @@ const create = async (hootFormData) => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
+        // Content-Type header is omitted to let the browser set the correct boundary
       },
-      body: JSON.stringify(hootFormData),
+      body: hootFormData, // FormData with both text and file data
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error creating hoot: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
-    console.log(error);
+    console.log("Error creating hoot:", error);
+    return null; // Handle error
   }
 };
 
@@ -50,11 +54,14 @@ const createComment = async (hootId, commentFormData) => {
       },
       body: JSON.stringify(commentFormData),
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error creating comment: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
     console.log(error);
+    return null; // Handle error
   }
 };
+
 const deleteHoot = async (hootId) => {
   try {
     const res = await fetch(`${BASE_URL}/${hootId}`, {
@@ -63,28 +70,33 @@ const deleteHoot = async (hootId) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error deleting hoot: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
     console.log(error);
+    return null; // Handle error
   }
 };
-async function update(hootId, hootFormData) {
+
+const update = async (hootId, hootFormData) => {
   try {
     const res = await fetch(`${BASE_URL}/${hootId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
+        // Content-Type header is omitted for FormData
       },
-      body: JSON.stringify(hootFormData),
+      body: hootFormData, // FormData allows for file uploads
     });
-    return res.json();
+    if (!res.ok) throw new Error(`Error updating hoot: ${res.statusText}`);
+    return await res.json();
   } catch (error) {
     console.log(error);
+    return null; // Handle error
   }
-}
+};
 
-async function deleteComment(hootId, commentId) {
+const deleteComment = async (hootId, commentId) => {
   try {
     const res = await fetch(`${BASE_URL}/${hootId}/comments/${commentId}`, {
       method: "DELETE",
@@ -92,13 +104,13 @@ async function deleteComment(hootId, commentId) {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    if (!res.ok) throw new Error("Could not delete comment");
-    return res.json();
+    if (!res.ok) throw new Error("Error deleting comment");
+    return await res.json();
   } catch (error) {
     console.log("Error deleting comment:", error);
-    throw error;
+    return null; // Handle error
   }
-}
+};
 
 export {
   index,

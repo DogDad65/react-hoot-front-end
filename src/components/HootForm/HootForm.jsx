@@ -1,8 +1,7 @@
-// src/components/HootForm/HootForm.jsx
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import * as hootService from '../../services/hootService';
-import styles from './HootForm.module.css'
+import styles from './HootForm.module.css';
 
 const HootForm = (props) => {
   const { hootId } = useParams();
@@ -11,6 +10,7 @@ const HootForm = (props) => {
     text: '',
     category: 'News',
   });
+  const [photo, setPhoto] = useState(null); // To handle file upload
 
   useEffect(() => {
     if (hootId) {
@@ -26,18 +26,28 @@ const HootForm = (props) => {
     setFormData({ ...formData, [evt.target.name]: evt.target.value });
   };
 
+  const handlePhotoChange = (evt) => {
+    setPhoto(evt.target.files[0]); // Store selected file in state
+  };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    const hootData = new FormData(); // Use FormData to include both text and file
+    hootData.append('title', formData.title);
+    hootData.append('text', formData.text);
+    hootData.append('category', formData.category);
+    if (photo) hootData.append('photo', photo); // Append the photo if available
+
     if (hootId) {
-      props.handleUpdateHoot(hootId, formData);
+      props.handleUpdateHoot(hootId, hootData);
     } else {
-      props.handleAddHoot(formData);
+      props.handleAddHoot(hootData);
     }
   };
 
   return (
     <main className={styles.container}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <h1>{hootId ? 'Edit Hoot' : 'New Hoot'}</h1>
         <label htmlFor="title-input">Title</label>
         <input
@@ -71,6 +81,8 @@ const HootForm = (props) => {
           <option value="Sports">Sports</option>
           <option value="Television">Television</option>
         </select>
+        <label htmlFor="photo-input">Photo</label>
+        <input type="file" name="photo" id="photo-input" onChange={handlePhotoChange} />
         <button type="submit">SUBMIT</button>
       </form>
     </main>

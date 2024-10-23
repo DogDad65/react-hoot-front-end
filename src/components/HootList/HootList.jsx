@@ -1,9 +1,12 @@
-// src/components/HootList/HootList.jsx
 import styles from "./HootList.module.css";
 import { Link } from "react-router-dom";
 import Icon from "../Icon/Icon";
 
 const HootList = (props) => {
+  if (!props.hoots || props.hoots.length === 0) {
+    return <p>No hoots available</p>;
+  }
+
   return (
     <main className={styles.container}>
       <h1>Hoot List</h1>
@@ -16,7 +19,7 @@ const HootList = (props) => {
                 <Icon category={hoot.category} />
               </div>
               <p>
-                {hoot.author.username} posted on{" "}
+                {hoot.author ? hoot.author.username : "Unknown Author"} posted on{" "}
                 {new Date(hoot.createdAt).toLocaleDateString()}
               </p>
             </header>

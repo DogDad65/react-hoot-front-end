@@ -1,5 +1,3 @@
-// src/components/Icon/Icon.jsx
-
 import Add from '../../assets/images/add.svg';
 import Edit from '../../assets/images/edit.svg';
 import News from '../../assets/images/news.svg';
@@ -13,7 +11,7 @@ import Sports from '../../assets/images/sports.svg';
 import Create from '../../assets/images/create.svg';
 import Comments from '../../assets/images/comments.svg';
 import Calendar from '../../assets/images/calendar.svg';
-import Televison from '../../assets/images/television.svg';
+import Television from '../../assets/images/television.svg';
 
 const Icon = ({ category }) => {
   const icons = {
@@ -30,14 +28,17 @@ const Icon = ({ category }) => {
     Create: Create,
     Calendar: Calendar,
     Comments: Comments,
-    Television: Televison,
+    Television: Television,
   };
+
+  // Fallback if category is undefined or if it's not found in the icons object
+  const icon = icons[category] || icons['Default']; // Optionally, you can add a default icon
 
   return (
     <img
-      src={icons[category]}
-      alt={`A ${category} icon.`}
-      id={category.toLowerCase()}
+      src={icon}  // Use the resolved icon
+      alt={`A ${category || 'default'} icon.`}  // Handle undefined category for alt text
+      id={category ? category.toLowerCase() : 'default'}  // Ensure id is not undefined
       className="icon"
     />
   );
